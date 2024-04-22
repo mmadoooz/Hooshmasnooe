@@ -1,0 +1,57 @@
+<?php
+
+// تعریف متغیرها
+$name = $_POST['name'];
+$lastname = $_POST['lastname'];
+$address = $_POST['address'];
+$phone = $_POST['phone'];
+$email = $_POST['email'];
+
+$books = [
+    'کتاب اول' => ['author' => 'نویسنده اول', 'price' => 5000, 'quantity' => $_POST['book1_quantity']],
+    'کتاب دوم' => ['author' => 'نویسنده دوم', 'price' => 3000, 'quantity' => $_POST['book2_quantity']],
+    // ... کتاب های دیگر
+];
+
+// محاسبه جمع کل
+$total = 0;
+foreach ($books as $book) {
+    $total += $book['price'] * $book['quantity'];
+}
+
+// اعمال تخفیف
+if ($total > 10000) {
+    $discount = $total * 0.5;
+    $total -= $discount;
+}
+
+// نمایش پیغام
+if (empty($name) || empty($lastname) || empty($address) || empty($phone) || empty($email)) {
+    echo "سفارش ثبت نشد. لطفا تمام فیلدها را پر کنید.";
+} else {
+    echo "<h2>سفارش شما با موفقیت ثبت شد!</h2>";
+    echo "<p>نام و نام خانوادگی: $name $lastname</p>";
+    echo "<p>آدرس: $address</p>";
+    echo "<p>شماره تلفن: $phone</p>";
+    echo "<p>ایمیل: $email</p>";
+
+    echo "<h3>سفارشات:</h3>";
+    echo "<table>";
+    echo "<tr><th>عنوان کتاب</th><th>نویسنده</th><th>تعداد</th><th>قیمت (تومان)</th></tr>";
+    foreach ($books as $bookTitle => $book) {
+        echo "<tr>";
+        echo "<td>$bookTitle</td>";
+        echo "<td>{$book['author']}</td>";
+        echo "<td>{$book['quantity']}</td>";
+        echo "<td>{$book['price']}</td>";
+        echo "</tr>";
+    }
+    echo "<tr><td></td><td></td><td></td><td><b>جمع کل:</b></td><td>{$total}</td></tr>";
+    if (isset($discount)) {
+        echo "<tr><td></td><td></td><td></td><td><b>تخفیف:</b></td><td>{$discount}</td></tr>";
+    }
+    echo "</table>";
+    echo "<p><b>مبلغ قابل پرداخت:</b> {$total}</p>";
+}
+
+?>
